@@ -71,7 +71,8 @@ class _LanguageAccessScreenState extends State<LanguageAccessScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
+                    builder: (context) => HomeScreen(  language: selectedLanguage, 
+                    accessibilityMode: accessibilityMode,),
                   ),
                 );
               },

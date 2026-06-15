@@ -1,12 +1,75 @@
 import 'package:flutter/material.dart';
 
-class ContextLayer extends StatelessWidget {
+class ContextLayer extends StatefulWidget {
+  final String language;
+  const ContextLayer({super.key,required this.language,});
+
   @override
+  State<ContextLayer> createState() => _ContextLayerState();
+}
+
+class _ContextLayerState extends State<ContextLayer> {
+  String t(String lang, String en, String ta, String hi) {
+  switch (lang) {
+    case "தமிழ்":
+      return ta;
+    case "Hindi":
+      return hi;
+    default:
+      return en;
+  }
+}
+  int temperature = 36;
+int humidity = 68;
+int windSpeed = 12;
+
+String weatherIcon = "☀️";
+
+String alert1 = "🌧 Rain expected within 2 hours";
+String alert2 = "🚧 Construction near Main Road";
+
+String delayRisk = "LOW";
+
+String recommendation =
+    "Leave within 30 minutes to avoid rainfall and ensure smooth travel.";
+    void refreshInsights() {
+  setState(() {
+    temperature = 30 + (DateTime.now().second % 8);
+    humidity = 60 + (DateTime.now().second % 30);
+    windSpeed = 10 + (DateTime.now().second % 15);
+
+    if (humidity > 75) {
+      weatherIcon = "🌧";
+      alert1 = "🌧 Rain likely soon";
+      alert2 = "⚠ Wet road conditions";
+      recommendation =
+          "Carry an umbrella and start early.";
+    } else if (temperature > 35) {
+      weatherIcon = "☀️";
+      alert1 = "🔥 High temperature warning";
+      alert2 = "☀ Heat exposure risk";
+      recommendation =
+          "Carry water and avoid peak heat.";
+    } else {
+      weatherIcon = "⛅";
+      alert1 = "✅ Weather conditions normal";
+      alert2 = "🚍 Transport operating normally";
+      recommendation =
+          "Good conditions for travel.";
+    }
+
+    delayRisk = windSpeed > 20 ? "MEDIUM" : "LOW";
+  });
+}
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0F172A),
       appBar: AppBar(
-        title: Text("🌦 Context-Aware Intelligence"),
+        title: Text( t(widget.language,
+    "🌦 Context-Aware Intelligence",
+    "🌦 சூழல் அறிவு",
+    "🌦 संदर्भ आधारित बुद्धिमत्ता"),),
         backgroundColor: Color(0xFF1E293B),
       ),
       body: SingleChildScrollView(
@@ -17,7 +80,10 @@ class ContextLayer extends StatelessWidget {
             // HEADER TITLE
             Center(
               child: Text(
-                "🌦 Context-Aware Intelligence",
+                t(widget.language,
+    "🌦 Context-Aware Intelligence",
+    "🌦 சூழல் அறிவு",
+    "🌦 संदर्भ आधारित बुद्धिमत्ता"),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -38,12 +104,15 @@ class ContextLayer extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text("☀️", style: TextStyle(fontSize: 60)),
+                  Text(
+  weatherIcon,
+  style: TextStyle(fontSize: 60),
+),
 
                   SizedBox(height: 10),
 
                   Text(
-                    "36°C",
+                    "$temperature°C",
                     style: TextStyle(
                       fontSize: 42,
                       color: Colors.amber,
@@ -56,9 +125,9 @@ class ContextLayer extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _infoBox("💧", "68%"),
+                      _infoBox("💧", "$humidity%"),
                       _infoBox("👀", "Good"),
-                      _infoBox("🌬", "12 km/h"),
+                      _infoBox("🌬", "$windSpeed km/h"),
                     ],
                   ),
                 ],
@@ -79,17 +148,24 @@ class ContextLayer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "⚠ Travel Alerts",
+                     t(widget.language,
+    "⚠ Travel Alerts",
+    "⚠ பயண எச்சரிக்கைகள்",
+    "⚠ यात्रा अलर्ट"),
                     style: TextStyle(
                       color: Colors.orangeAccent,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text("🌧 Rain expected within 2 hours",
-                      style: TextStyle(color: Colors.orangeAccent)),
-                  Text("🚧 Construction near Main Road",
-                      style: TextStyle(color: Colors.orangeAccent)),
+                  Text(
+  t(widget.language, alert1, alert1, alert1),
+  style: TextStyle(color: Colors.orangeAccent),
+),
+                  Text(
+  t(widget.language, alert2, alert2, alert2),
+  style: TextStyle(color: Colors.orangeAccent),
+),
                 ],
               ),
             ),
@@ -108,20 +184,35 @@ class ContextLayer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "⏱ Commute Impact Analysis",
+                    t(widget.language,
+    "⏱ Commute Impact Analysis",
+    "⏱ பயண தாக்க பகுப்பாய்வு",
+    "⏱ यात्रा प्रभाव विश्लेषण"),
                     style: TextStyle(
                       color: Colors.greenAccent,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text("🟢 Delay Risk: LOW",
+                  Text(t(widget.language,
+    "🟢 Delay Risk: $delayRisk",
+    "🟢 தாமத ஆபத்து: $delayRisk",
+    "🟢 देरी जोखिम: $delayRisk"),
                       style: TextStyle(color: Colors.greenAccent)),
-                  Text("Expected Delay: +4 mins",
+                  Text(t(widget.language,
+    "Expected Delay: +4 mins",
+    "எதிர்பார்க்கப்படும் தாமதம்: +4 நிமிடம்",
+    "अनुमानित देरी: +4 मिनट"),
                       style: TextStyle(color: Colors.white70)),
-                  Text("Road Conditions: Stable",
+                  Text( t(widget.language,
+    "Road Conditions: Stable",
+    "சாலை நிலை: நிலையானது",
+    "सड़क स्थिति: स्थिर"),
                       style: TextStyle(color: Colors.white70)),
-                  Text("Transport: Running Normally",
+                  Text(t(widget.language,
+    "Transport: Running Normally",
+    "போக்குவரத்து: வழக்கமாக இயங்குகிறது",
+    "परिवहन: सामान्य रूप से चल रहा है"),
                       style: TextStyle(color: Colors.white70)),
                 ],
               ),
@@ -141,7 +232,10 @@ class ContextLayer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "💡 Smart Recommendation",
+                     t(widget.language,
+    "💡 Smart Recommendation",
+    "💡 புத்திசாலி பரிந்துரை",
+    "💡 स्मार्ट सुझाव"),
                     style: TextStyle(
                       color: Colors.lightBlueAccent,
                       fontWeight: FontWeight.bold,
@@ -149,7 +243,7 @@ class ContextLayer extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Leave within 30 minutes to avoid rainfall and ensure smooth travel.",
+                    t(widget.language, recommendation, recommendation, recommendation),
                     style: TextStyle(color: Colors.white70),
                   ),
                   SizedBox(height: 10),
@@ -157,6 +251,13 @@ class ContextLayer extends StatelessWidget {
                     "Carry an umbrella. Weather may change later.",
                     style: TextStyle(color: Colors.white70),
                   ),
+                  const SizedBox(height: 15),
+
+ElevatedButton.icon(
+  onPressed: refreshInsights,
+  icon: const Icon(Icons.refresh),
+  label: const Text("Refresh Insights"),
+),
                 ],
               ),
             ),

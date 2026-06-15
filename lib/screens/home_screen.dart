@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:smartcommute/safety_layer.dart';
 import 'package:smartcommute/context_layer.dart';
+import 'package:smartcommute/route_planner/screens/map_screen.dart';
+
 class HomeScreen extends StatelessWidget {
+  final String language;
+  String t(String lang, String en, String ta, String hi) {
+  switch (lang) {
+    case "தமிழ்":
+      return ta;
+    case "Hindi":
+      return hi;
+    default:
+      return en;
+  }
+}
+  final bool accessibilityMode;
+
+  const HomeScreen({
+    super.key,
+    required this.language,
+    required this.accessibilityMode,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +61,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 14),
 
             Text(
-              "Dashboard",
+              t(language, "Dashboard", "டாஷ்போர்டு", "डैशबोर्ड"),
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 14,
@@ -58,54 +79,35 @@ class HomeScreen extends StatelessWidget {
                 childAspectRatio: 1.4,
                 children: [
 
+                  // 🗺 ROUTE PLANNER (UPDATED)
                   _buildCard(
                     context,
-                    "🗺 Route Planner",
+                    t(language, "🗺 Route Planner", "🗺 வழி திட்டமிடுபவர்", "🗺 रूट प्लानर"),
                     "Find best routes",
                     Colors.blue,
-                    () {
-                      // future screen
-                    },
-                  ),
-
-                  _buildCard(
-                    context,
-                    "🛡 Safety Layer",
-                    "Report & SOS",
-                    Colors.red,
                     () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SafetyLayer(),
+                          builder: (context) => MapScreen(language: language,
+  accessibilityMode: accessibilityMode,),
                         ),
                       );
                     },
                   ),
 
+
                   _buildCard(
                     context,
-                    "🌦 Context Aware",
+                    t(language, "🌦 Context Aware", "🌦 சூழல் அறிவு", "🌦 संदर्भ प्रणाली"),
                     "Weather alerts",
                     Colors.orange,
                     () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ContextLayer(),
+                          builder: (context) => ContextLayer( language: language,),
                         ),
-                      );
-                    },
-                  ),
-
-                  _buildCard(
-                    context,
-                    "💬 Feedback",
-                    "User input",
-                    Colors.green,
-                    () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Feedback screen coming soon")),
                       );
                     },
                   ),
